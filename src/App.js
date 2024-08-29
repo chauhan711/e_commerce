@@ -8,7 +8,7 @@ import PublicRoutes from './components/middlewares/PublicRoutes.component.js';
 import ProtectedRoutes from './components/middlewares/ProtectedRoutes.component';
 import DashboardPermission from './components/middlewares/DashboardPermission.component.js';
 import AdminDashboard from './components/admin/adminDashboard.component';
-import UserDashboard from './components/user/userDashboard.component.js';
+import UserDashboard from './components/user/userDashboard.component.js'; 
 import SalerDashboard from './components/saler/salerDashboard.component';
 import Cart from './components/user/cart/cart.component.js';
 import Logout from './components/logout.component.js';
