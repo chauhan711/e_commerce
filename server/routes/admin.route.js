@@ -18,4 +18,5 @@ router.get('/get-refunded-payments',AdminController.refundedPayments);
 //for chat
 router.get('/get-all-conversations',AdminController.getAllConversation);
 router.get('/get-conversation-messages/:id',AdminController.getConversation);
+router.post('/add-message',AdminController.addMessage);
 module.exports = router;

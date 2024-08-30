@@ -132,8 +132,26 @@ const getConversation = async (req,res) => {
         res.status(400).send({error:err});
     }
 }
+const addMessage = async (req,res) => {
+    try{
+        const conversationId = req.body.conversationId;
+        const conversation = await conversationModel.findByPk(conversationId);
+        if(conversation)
+        {
+            const message = req.body.reply;
+            const addMessage = await MessageModel.create({
+                userId : req.user.id , reply:message,conversationId:conversationId
+            });
+            req.io.emit('UserNewMessage');
+            return res.status(200).send({message:'success'});
+        }
+    }catch(err)
+    {
+        console.log(err);
+    }
+}
 module.exports = {
     allUsers,getAllPayments,getOrderProducts,
     refundPayment,refundedPayments,getAllConversation,
-    getConversation
+    getConversation,addMessage
 };
