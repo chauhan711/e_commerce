@@ -275,24 +275,32 @@ const capturePaypalPayment = async (req,res) => {
     }
 }
 //for conversation with admin
-const chatWithAdmin = async (req,res) => {
+const createUserMessages = async (req,res) => {
     try{
         const data = req.body;
         const message = data.message;
-        const AdminId = helpers.getAdmin(); // By default 1
-        const verifyConversationExistance = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:AdminId}});
+        const user_two = data.user_two;
+        let userTwoId;
+        if(user_two === helpers.getAdminName()){
+            userTwoId = helpers.getAdmin(); // By default 1
+        }
+        else{
+            userTwoId = user_two;
+        }
+        const verifyConversationExistance = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:userTwoId}});
         if(!verifyConversationExistance)
         {
             //create conversation
             //user 1 must be user / user 2 admin,saler and so on
-            await ConversationModel.create({user_one:req.user.id,user_two:AdminId,title:message});
+            await ConversationModel.create({user_one:req.user.id,user_two:userTwoId,title:message});
         }
         else{
             //If conversation then create reply    
-            const getConversation = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:AdminId}});
+            const getConversation = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:userTwoId}});
             //create new message
             await MessageModel.create({userId:req.user.id,reply:message,conversationId:getConversation.dataValues.id});
         }
+        req.io.emit('UserNewMessage');
         res.status(200).send({message:'success'});
     }   
     catch(err)
@@ -302,8 +310,6 @@ const chatWithAdmin = async (req,res) => {
 }
 const UserConversations = async (req,res) => {
     try{
-        // console.log(req.body);
-        // return;
         const id = req.params.id;
         let user_two;
         if(id === helpers.getAdminName()) {
@@ -316,14 +322,12 @@ const UserConversations = async (req,res) => {
             where:{id:req.user.id},
             include : {
                 model: ConversationModel,
+                where: { user_two: user_two },
                 required:false,
                 as:'user_conversation',
                 include : {
                     model : MessageModel,
                     required:false,
-                    order: [
-                        [sequelize.literal('created_at, id'), 'asc']
-                     ]
                 }
             }
         });
@@ -337,6 +341,7 @@ const UserConversations = async (req,res) => {
 }
 
 module.exports = {
-    getAllProducts,addToCart,getUserProducts,generateOtp,makePayment,
-    createPaypalPayment,capturePaypalPayment,chatWithAdmin,UserConversations
+    getAllProducts,addToCart,getUserProducts,
+    generateOtp,makePayment,createPaypalPayment,
+    capturePaypalPayment,createUserMessages,UserConversations
 };

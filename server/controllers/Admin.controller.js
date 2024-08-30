@@ -1,11 +1,13 @@
 const userModel = require('../models/user.model');
 const stripe = require('../utils/stripe.utils');
+const helpers = require('../helpers/helper.js');
 const orderModel = require('../models/order.model');
 const ProductModel = require('../models/product.model');
 const stripeStatus = require('../helpers/stripeStatus.helper.js');
 const paymentStatus = require('../helpers/paymentStatus.helper.js');
 const userModels = require('../models/user.model.js');
-
+const conversationModel = require('../models/conversation.model.js');
+const MessageModel = require('../models/message.model.js');
 //get all users
 const allUsers = async(req,resp)=>{
     try{
@@ -16,7 +18,6 @@ const allUsers = async(req,resp)=>{
         resp.send({error:err});
     }   
 }
-
 // Payments Api's start
 //get all payments
 const getAllPayments = async(req,resp) => {
@@ -91,5 +92,48 @@ const refundedPayments = async(req,resp) =>{
     }
 }
 // Payments Api's End
-
-module.exports = {allUsers,getAllPayments,getOrderProducts,refundPayment,refundedPayments};
+const getAllConversation = async(req,resp)=>{
+    try{
+        const AdminId = helpers.getAdmin();
+        if(req.user.id == AdminId){
+            const userConversations = await userModel.findOne({
+                where:{id:AdminId},
+                include : {
+                    model:conversationModel,
+                    require:false,
+                    as: 'others_conversation',
+                    include : {
+                        model : userModel,
+                        as : 'conversation_user'
+                    }
+                }
+            });
+            console.log(userConversations);
+            resp.status(200).send({data:userConversations});
+        }
+    }   
+    catch(err){
+        resp.status(400).send({error:err});
+    }
+}
+const getConversation = async (req,res) => {
+    try{
+        const conversationId = req.params.id;
+        const conversation = await conversationModel.findOne({
+            where:{id:conversationId},
+            include:{
+                model:MessageModel,
+                require:false
+            }
+        });
+        res.status(200).send({conversation:conversation});
+    }
+    catch(err){
+        res.status(400).send({error:err});
+    }
+}
+module.exports = {
+    allUsers,getAllPayments,getOrderProducts,
+    refundPayment,refundedPayments,getAllConversation,
+    getConversation
+};

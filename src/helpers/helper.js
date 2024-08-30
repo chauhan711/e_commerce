@@ -52,6 +52,10 @@ class helper{
     {
         return 'Admin';
     }
+    getAdmin()
+    {
+        return 1;
+    }
 }
 const helpers = new helper();
 export default helpers;

@@ -1,16 +1,16 @@
-ul {
+/* ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
-  }
-  
+  } */
+/*   
   li {
     float: left;
   }
-  
-  li a {
+   */
+  /* li a {
     display: block;
     color: white;
     text-align: center;
@@ -20,13 +20,13 @@ ul {
   
   li a:hover {
     background-color: #111;
-  }
-  footer {
+  } */
+  /* footer {
     text-align: center;
     padding: 3px;
     background-color: DarkSalmon;
     color: white;
-  }
+  } */
 .logoutButton{
     background: none !important;
     border: none;
@@ -40,4 +40,8 @@ ul {
 }
 .leftSide {
   text-align: left;
+}
+.msgContainer{
+  width:50%;
+  margin-top: 5%;
 }

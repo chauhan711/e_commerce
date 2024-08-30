@@ -22,7 +22,7 @@ router.post('/create-payment-paypal',UserController.createPaypalPayment)
 router.post('/capture-paypal-order',UserController.capturePaypalPayment);
 
 //chat system
-router.post('/user-chat',UserController.chatWithAdmin)
+router.post('/user-chat',UserController.createUserMessages);
 router.get('/user-conversations/:id',UserController.UserConversations)
 
 module.exports = router;

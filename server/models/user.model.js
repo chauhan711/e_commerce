@@ -57,7 +57,19 @@ sequelize.sync({ force: false }).then(async() => {
     {
       id:4,
       name:'test user',
-      email :'testuser@yopmail.com',
+      email :'testuser1@yopmail.com',
+      password : '$2a$10$DSWbtiKUSfp.EEPw8I3h9ObCQ1bdeaP3E4LuRi1oXHltXUuWYdBsi'
+    },
+    {
+      id:5,
+      name:'test user1',
+      email :'testuser2@yopmail.com',
+      password : '$2a$10$DSWbtiKUSfp.EEPw8I3h9ObCQ1bdeaP3E4LuRi1oXHltXUuWYdBsi'
+    },
+    {
+      id:6,
+      name:'test user2',
+      email :'testuser2@yopmail.com',
       password : '$2a$10$DSWbtiKUSfp.EEPw8I3h9ObCQ1bdeaP3E4LuRi1oXHltXUuWYdBsi'
     }
   ],{ ignoreDuplicates: true});
@@ -68,6 +80,8 @@ sequelize.sync({ force: false }).then(async() => {
     {userId:2,roleId:3},
     {userId:3,roleId:4},
     {userId:4,roleId:3},
+    {userId:5,roleId:3},
+    {userId:6,roleId:3},
   ],{ignoreDuplicates:true});
 }).catch((error) => {
   console.error('Unable to create user table : ', error);

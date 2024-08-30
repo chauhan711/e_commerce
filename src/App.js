@@ -18,6 +18,7 @@ import OrderProducts from './components/admin/payments/orderProducts.component.j
 import AllUsers from './components/admin/users/allUsers.component.js';
 import UserOrders from './components/user/Orders/userOrders.component.js';
 import GetHelp from './components/user/Help/getHelp.component.js';
+import ChatWithUser from './components/admin/chat/chatWithUser.component.js';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path='/order-products/:id' element={<OrderProducts/>} />
                 <Route path='/all-users' element={<AllUsers/>} />
                 <Route path='/refunded-payments' element={<Refunded/>} />
+                <Route path='/user-chat' element={<ChatWithUser/>} />
               </Route>
 
               <Route element={<DashboardPermission dashboard={Saler_Dashboard}/>} >

@@ -32,6 +32,9 @@ const Conversation = sequelize.define('conversations',{
 userModels.hasMany(Conversation,{foreignKey: 'user_one',as:'user_conversation'});
 userModels.hasMany(Conversation,{foreignKey: 'user_two',as:'others_conversation'});
 
+Conversation.belongsTo(userModels,{foreignKey: 'user_one',as:'conversation_user'});
+Conversation.belongsTo(userModels,{foreignKey: 'user_two',as:'conversation_others'});
+
 sequelize.sync({force:false}).then(async()=>{
     console.log('Conversation table created successfully');
 }).catch((error)=>{
