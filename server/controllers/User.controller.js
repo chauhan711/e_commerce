@@ -287,19 +287,15 @@ const createUserMessages = async (req,res) => {
         else{
             userTwoId = user_two;
         }
-        const verifyConversationExistance = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:userTwoId}});
-        if(!verifyConversationExistance)
+        let getConversation = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:userTwoId}});
+        if(!getConversation)
         {
             //create conversation
-            //user 1 must be user / user 2 admin,saler and so on
-            await ConversationModel.create({user_one:req.user.id,user_two:userTwoId,title:message});
+            //user 1 must be user and user 2 admin,saler and so on
+            getConversation=  await ConversationModel.create({user_one:req.user.id,user_two:userTwoId,title:message});
         }
-        else{
-            //If conversation then create reply    
-            const getConversation = await ConversationModel.findOne({where:{user_one:req.user.id,user_two:userTwoId}});
-            //create new message
-            await MessageModel.create({userId:req.user.id,reply:message,conversationId:getConversation.dataValues.id});
-        }
+        //create new message
+        await MessageModel.create({userId:req.user.id,reply:message,conversationId:getConversation.dataValues.id});
         req.io.emit('UserNewMessage');
         res.status(200).send({message:'success'});
     }   
@@ -328,9 +324,14 @@ const UserConversations = async (req,res) => {
                 include : {
                     model : MessageModel,
                     required:false,
+                    order: [
+                        ['createdAt', 'ASC'],
+                    ],
                 }
             }
         });
+        // console.log(UserConversations.user_conversation[0].dataValues.messages);
+        // return;
         res.status(200).send({data:UserConversations});
     }
     catch(err)

@@ -9,12 +9,12 @@ const User = ({children}) =>  {
 	return (
 	  <div>
         <header>
-        <ul>
-            <li><Link to="/user-dashboard">Home</Link></li>
+        <ul className='linkContainer'>
+            <li class="navLink"><Link to="/user-dashboard">Home</Link></li>
             {/* <li><a href="#">News</a></li> */}
-            <li><Link to="/user-orders">Orders</Link></li>
-            <li><Link to="/get-help">Help</Link></li>
-            <li><button onClick={handleLogout} className='logoutButton'>Logout</button></li>
+            <li class="navLink"><Link to="/user-orders">Orders</Link></li>
+            <li class="navLink"><Link to="/get-help">Help</Link></li>
+            <li class="navLink"><button onClick={handleLogout} className='logoutButton'>Logout</button></li>
             {!loggedIn && <Logout />}
         </ul>
         </header>

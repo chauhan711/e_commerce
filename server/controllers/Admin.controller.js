@@ -8,6 +8,7 @@ const paymentStatus = require('../helpers/paymentStatus.helper.js');
 const userModels = require('../models/user.model.js');
 const conversationModel = require('../models/conversation.model.js');
 const MessageModel = require('../models/message.model.js');
+const StorageModel = require('../models/storages.model.js');
 //get all users
 const allUsers = async(req,resp)=>{
     try{
@@ -92,6 +93,8 @@ const refundedPayments = async(req,resp) =>{
     }
 }
 // Payments Api's End
+
+//chat app api
 const getAllConversation = async(req,resp)=>{
     try{
         const AdminId = helpers.getAdmin();
@@ -121,10 +124,20 @@ const getConversation = async (req,res) => {
         const conversationId = req.params.id;
         const conversation = await conversationModel.findOne({
             where:{id:conversationId},
-            include:{
+            include:[{
                 model:MessageModel,
-                require:false
+                require:false,
+                include : {
+                    model:StorageModel,
+                    require:false
+                }
+            },
+            {
+                model:userModel,
+                as:'conversation_user',
+                required:false
             }
+        ]
         });
         res.status(200).send({conversation:conversation});
     }
@@ -134,14 +147,24 @@ const getConversation = async (req,res) => {
 }
 const addMessage = async (req,res) => {
     try{
+        const file = req.file;
         const conversationId = req.body.conversationId;
         const conversation = await conversationModel.findByPk(conversationId);
         if(conversation)
         {
             const message = req.body.reply;
+            //store message
             const addMessage = await MessageModel.create({
                 userId : req.user.id , reply:message,conversationId:conversationId
             });
+            if(file){
+                //store file name if any
+                const storage = await StorageModel.create({originalname: file.originalname,
+                                    mimetype : file.mimetype,destination:file.destination,
+                                    destination : file.destination,storageableId:addMessage.dataValues.id,
+                                    storageableType:'Message',filename:file.filename,path:file.path
+                                });
+            }
             req.io.emit('UserNewMessage');
             return res.status(200).send({message:'success'});
         }
@@ -150,8 +173,36 @@ const addMessage = async (req,res) => {
         console.log(err);
     }
 }
+const updateMessage = async(req,res) => {
+    try{
+        const {messageId} = req.body;
+        const {reply} = req.body;
+        //find msg and update
+        const message = await MessageModel.findByPk(messageId);
+        const updated = await message.update({reply:reply});
+        req.io.emit('UserNewMessage');
+        return res.status(200).send({message:'success'});
+    }
+    catch(err)
+    {
+        res.status(400).send({error:err});
+    }
+}
+const deleteMessage = async(req,res) => {
+    try{
+        const id = req.params.id;
+        await MessageModel.destroy({where:{id:id}});
+        req.io.emit('UserNewMessage');
+        res.status(200).send({message:'success'});
+    }
+    catch(err){
+        res.status(400).send({error:err});
+    }
+}
+
+
 module.exports = {
     allUsers,getAllPayments,getOrderProducts,
     refundPayment,refundedPayments,getAllConversation,
-    getConversation,addMessage
+    getConversation,addMessage,updateMessage,deleteMessage
 };

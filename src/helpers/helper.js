@@ -48,6 +48,11 @@ class helper{
         const headers = {headers:{Authorization:`Bearer ${token}`}};
         return headers;
     }
+    getFileHeaders(){
+        const token   = localStorage.getItem('token');
+        const headers = {headers:{Authorization:`Bearer ${token}`,"Content-Type": "multipart/form-data"}};
+        return headers;
+    }
     getAdminName()
     {
         return 'Admin';

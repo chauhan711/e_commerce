@@ -63,7 +63,7 @@ const Cart = () =>  {
                 {
                 (quantity > 0 && !paypalPay)&&
                     // <button onClick={handlePay} className='btn btn-success'>Checkout</button> (For Stripe)
-                    <button onClick={handlePaypalCheckout} className='btn btn-success'>Checkout</button>
+                    <button onClick={handlePaypalCheckout} className='btn btn-success'>Checkout</button> //(For paypal)
                 }
                 {
                     paymentReady && <Pay Amount={totalAmt}/>

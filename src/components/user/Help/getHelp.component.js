@@ -17,9 +17,10 @@ import {io} from 'socket.io-client'
       setTimeout(()=>socket.connect(),5000)
     });
     socket.on('disconnect',()=>setTimeout('server disconnected'));
-    // socket.on('UserNewMessage',function(){
-    //     getAllMessages();
-    // });
+    socket.on('UserNewMessage',function(){
+        // console.log('calll');
+        getAllMessages();
+    });
     
     //get All Messages
     const getAllMessages = () => {

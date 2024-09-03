@@ -1,16 +1,16 @@
-/* ul {
+.linkContainer{
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
     background-color: #333;
-  } */
-/*   
-  li {
+  }
+  
+  .navLink {
     float: left;
   }
-   */
-  /* li a {
+  
+  .navLink a {
     display: block;
     color: white;
     text-align: center;
@@ -18,15 +18,15 @@
     text-decoration: none;
   }
   
-  li a:hover {
+  .navLink a:hover {
     background-color: #111;
   } */
-  /* footer {
+  footer {
     text-align: center;
     padding: 3px;
     background-color: DarkSalmon;
     color: white;
-  } */
+  }
 .logoutButton{
     background: none !important;
     border: none;
