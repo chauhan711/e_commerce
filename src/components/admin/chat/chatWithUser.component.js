@@ -173,7 +173,7 @@ const ChatWithUser = () => {
                                             <div class="chat-about">
                                                 <h6 class="m-b-0">{conversation?.conversation_user?.name}</h6>
                                                 <small></small>
-                                            </div>
+                                            </div> 
                                         </div>
                                         <div class="col-lg-6 hidden-sm text-right">
                                             {message && 
